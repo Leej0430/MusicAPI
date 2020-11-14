@@ -46,7 +46,7 @@ class MusicAdapter(val dataSet: MusicList,val activityCallback: (music:Musicinfo
     }
 
     override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
-      holder.onBind(dataSet.results[position],activityCallback )
+      holder.onBind(dataSet.results[position],activityCallback)
     }
 
     override fun getItemCount(): Int {

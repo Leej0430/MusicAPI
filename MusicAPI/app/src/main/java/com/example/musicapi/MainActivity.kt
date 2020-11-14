@@ -18,23 +18,20 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
     lateinit var recyclerView:RecyclerView
     var genre= MusicAPI.initRetrofit().getRock()
-    var playback : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         recyclerView = findViewById(R.id.recycler_musics)
-
         tabs.addOnTabSelectedListener(this)
-        tabs.selectedTabPosition
 
-        show(genre)
-
+        //Refresh for the music lists
         refresh_layout.setOnRefreshListener{
             if(tabs.selectedTabPosition==0){
                 genre= MusicAPI.initRetrofit().getRock()
                 show(genre)
                 refresh_layout.isRefreshing=false
-
             }
             if(tabs.selectedTabPosition==1){
                 genre= MusicAPI.initRetrofit().getClassic()
@@ -48,9 +45,10 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             }
         }
 
+        show(genre)
         }
 
-
+//reloading the data when the tab changed
     override fun onTabSelected(tab: TabLayout.Tab?) {
 
         when(tab?.text){
@@ -59,6 +57,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             "Pop"->  genre= MusicAPI.initRetrofit().getPop()
         }
         show(genre)
+
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     override fun onTabReselected(tab: TabLayout.Tab?) {
 
     }
-
+    //show the list on the recycler view
     private fun show(call: retrofit2.Call<MusicList>){
         call.enqueue(
             object:Callback<MusicList>{
@@ -81,18 +80,19 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
                             recyclerView.layoutManager = GridLayoutManager(this@MainActivity,1)
                             recyclerView.adapter = MusicAdapter(it,::playMusic)
                         }
+
                     }
                 }
 
                 override fun onFailure(call: retrofit2.Call<MusicList>, t: Throwable) {
-
+                    Toast.makeText(this@MainActivity,"Error",Toast.LENGTH_SHORT).show()
                 }
 
             }
         )
 
     }
-
+//function for the play music
     private fun playMusic(musicinfo: Musicinfo){
     val intent =Intent()
         intent.action=Intent.ACTION_VIEW
