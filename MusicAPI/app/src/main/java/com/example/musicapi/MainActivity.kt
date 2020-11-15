@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
                     if(response.isSuccessful){
                         response.body()?.let {
                             recyclerView.layoutManager = GridLayoutManager(this@MainActivity,1)
-                            recyclerView.adapter = MusicAdapter(it,::playMusic)
+                            recyclerView.adapter = MusicAdapter(it,this@MainActivity::playMusic)
                         }
 
                     }

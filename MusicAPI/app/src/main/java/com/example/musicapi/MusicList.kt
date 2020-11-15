@@ -5,7 +5,6 @@ import android.os.Parcel
 import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class MusicList(
-    val resultCount:Int,
     val results :List<Musicinfo>
 ):Parcelable
 
